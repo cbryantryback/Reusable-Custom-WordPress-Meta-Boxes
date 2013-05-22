@@ -3,6 +3,9 @@
 // metaboxes directory constant
 define( 'CUSTOM_METABOXES_DIR', trailingslashit( plugin_dir_url( __FILE__ ) ) );
 
+// metaboxes namespace constant
+define( 'CUSTOM_METABOXES_TEXTDOMAIN', 'custom-metaboxes-textdomain' );
+
 /**
  * recives data about a form field and spits out the proper html
  *
@@ -114,7 +117,7 @@ function custom_meta_box_field( $field, $meta = null, $repeatable = null ) {
 			foreach ( $posts as $item )
 				echo '<option value="' . $item->ID . '"' . selected( is_array( $meta ) && in_array( $item->ID, $meta ), true, false ) . '>' . $item->post_title . '</option>';
 			$post_type_object = get_post_type_object( $post_type );
-			echo '</select> &nbsp;<span class="description"><a href="' . admin_url( 'edit.php?post_type=' . $post_type . '">Manage ' . $post_type_object->label ) . '</a></span><br />' . $desc;
+			echo '</select> &nbsp;<span class="description"><a href="' . admin_url( 'edit.php?post_type=' . $post_type  ) . '">' . printf( '%1$s %2$s', __( 'Manage', CUSTOM_METABOXES_TEXTDOMAIN ), $post_type_object->label ) . '</a></span><br />' . $desc;
 		break;
 		// post_checkboxes
 		case 'post_checkboxes':
@@ -124,13 +127,13 @@ function custom_meta_box_field( $field, $meta = null, $repeatable = null ) {
 				echo '<li><input type="checkbox" value="' . $item->ID . '" name="' . esc_attr( $name ) . '[]" id="' . esc_attr( $id ) . '-' . $item->ID . '"' , is_array( $meta ) && in_array( $item->ID, $meta ) ? ' checked="checked"' : '' , ' />
 						<label for="' . esc_attr( $id ) . '-' . $item->ID . '">' . $item->post_title . '</label></li>';
 			$post_type_object = get_post_type_object( $post_type );
-			echo '</ul> ' . $desc , ' &nbsp;<span class="description"><a href="' . admin_url( 'edit.php?post_type=' . $post_type . '">Manage ' . $post_type_object->label ) . '</a></span>';
+			echo '</ul> ' . $desc , ' &nbsp;<span class="description"><a href="' . admin_url( 'edit.php?post_type=' . $post_type ) . '">' . printf( '%1$s %2$s', __( 'Manage', CUSTOM_METABOXES_TEXTDOMAIN ), $post_type_object->label ) . '</a></span>';
 		break;
 		// post_drop_sort
 		case 'post_drop_sort':
 			//areas
 			$post_type_object = get_post_type_object( $post_type );
-			echo '<p>' . $desc . ' &nbsp;<span class="description"><a href="' . admin_url( 'edit.php?post_type=' . $post_type . '">Manage ' . $post_type_object->label ) . '</a></span></p><div class="post_drop_sort_areas">';
+			echo '<p>' . $desc . ' &nbsp;<span class="description"><a href="' . admin_url( 'edit.php?post_type=' . $post_type ) . '">' . printf( '%1$s %2$s', __( 'Manage', CUSTOM_METABOXES_TEXTDOMAIN ), $post_type_object->label ) . '</a></span></p><div class="post_drop_sort_areas">';
 			foreach ( $areas as $area ) {
 				echo '<ul id="area-' . $area['id']  . '" class="sort_list">
 						<li class="post_drop_sort_area_name">' . $area['label'] . '</li>';
@@ -155,7 +158,7 @@ function custom_meta_box_field( $field, $meta = null, $repeatable = null ) {
 			}
 			$posts = get_posts( array( 'post_type' => $post_type, 'posts_per_page' => -1, 'post__not_in' => $exclude ) );
 			echo '<ul class="post_drop_sort_source sort_list">
-					<li class="post_drop_sort_area_name">Available ' . $label . '</li>';
+					<li class="post_drop_sort_area_name">' . printf( '%1$s %2$s', __( 'Available', CUSTOM_METABOXES_TEXTDOMAIN ), $label ) . '</li>';
 			foreach ( $posts as $item ) {
 				$output = $display == 'thumbnail' ? get_the_post_thumbnail( $item->ID, array( 204, 30 ) ) : get_the_title( $item->ID ); 
 				echo '<li id="' . $item->ID . '">' . $output . '</li>';
@@ -174,7 +177,7 @@ function custom_meta_box_field( $field, $meta = null, $repeatable = null ) {
 				$term_value = $taxonomy->hierarchical ? $term->term_id : $term->slug;
 				echo '<option value="' . $term_value . '"' . selected( $selected, $term_value, false ) . '>' . $term->name . '</option>'; 
 			}
-			echo '</select> &nbsp;<span class="description"><a href="'.get_bloginfo( 'url' ) . '/wp-admin/edit-tags.php?taxonomy=' . $id . '">Manage ' . $taxonomy->label . '</a></span>
+			echo '</select> &nbsp;<span class="description"><a href="'.get_bloginfo( 'url' ) . '/wp-admin/edit-tags.php?taxonomy=' . $id . '">' . printf( '%1$s %2$s', __( 'Manage', CUSTOM_METABOXES_TEXTDOMAIN ), $taxonomy->label ) . '</a></span>
 				<br />' . $desc;
 		break;
 		// tax_checkboxes
@@ -187,7 +190,7 @@ function custom_meta_box_field( $field, $meta = null, $repeatable = null ) {
 				$term_value = $taxonomy->hierarchical ? $term->term_id : $term->slug;
 				echo '<input type="checkbox" value="' . $term_value . '" name="' . $id . '[]" id="term-' . $term_value . '"' . checked( $checked, $term_value, false ) . ' /> <label for="term-' . $term_value . '">' . $term->name . '</label><br />';
 			}
-			echo '<span class="description">' . $field['desc'] . ' <a href="'.get_bloginfo( 'url' ) . '/wp-admin/edit-tags.php?taxonomy=' . $id . '&post_type=' . $page . '">Manage ' . $taxonomy->label . '</a></span>';
+			echo '<span class="description">' . $field['desc'] . ' <a href="'.get_bloginfo( 'url' ) . '/wp-admin/edit-tags.php?taxonomy=' . $id . '&post_type=' . $page . '">' . printf( '%1$s %2$s', __( 'Manage', CUSTOM_METABOXES_TEXTDOMAIN ), $taxonomy->label ) . '</a></span>';
 		break;
 		// date
 		case 'date':
@@ -211,8 +214,8 @@ function custom_meta_box_field( $field, $meta = null, $repeatable = null ) {
 			}				
 			echo	'<input name="' . esc_attr( $name ) . '" type="hidden" class="meta_box_upload_image" value="' . intval( $meta ) . '" />
 						<img src="' . esc_attr( $image ) . '" class="meta_box_preview_image" alt="" />
-							<a href="#" class="meta_box_upload_image_button button" rel="' . get_the_ID() . '">Choose Image</a>
-							<small>&nbsp;<a href="#" class="meta_box_clear_image_button">Remove Image</a></small></div>
+							<a href="#" class="meta_box_upload_image_button button" rel="' . get_the_ID() . '">' . __( 'Choose Image', CUSTOM_METABOXES_TEXTDOMAIN ) . '</a>
+							<small>&nbsp;<a href="#" class="meta_box_clear_image_button">' . __( 'Remove Image', CUSTOM_METABOXES_TEXTDOMAIN ) . '</a></small></div>
 							<br clear="all" />' . $desc;
 		break;
 		// file
@@ -222,8 +225,8 @@ function custom_meta_box_field( $field, $meta = null, $repeatable = null ) {
 			echo	'<div class="meta_box_file_stuff"><input name="' . esc_attr( $name ) . '" type="hidden" class="meta_box_upload_file" value="' . esc_url( $meta ) . '" />
 						<span class="' . $iconClass . '"></span>
 						<span class="meta_box_filename">' . esc_url( $meta ) . '</span>
-							<a href="#" class="meta_box_upload_image_button button" rel="' . get_the_ID() . '">Choose File</a>
-							<small>&nbsp;<a href="#" class="meta_box_clear_file_button">Remove File</a></small></div>
+							<a href="#" class="meta_box_upload_image_button button" rel="' . get_the_ID() . '">' . __( 'Choose File', CUSTOM_METABOXES_TEXTDOMAIN ) . '</a>
+							<small>&nbsp;<a href="#" class="meta_box_clear_file_button">' . __( 'Remove File', CUSTOM_METABOXES_TEXTDOMAIN ) . '</a></small></div>
 							<br clear="all" />' . $desc;
 		break;
 		// repeatable
@@ -232,7 +235,7 @@ function custom_meta_box_field( $field, $meta = null, $repeatable = null ) {
 				<thead>
 					<tr>
 						<th><span class="sort_label"></span></th>
-						<th>Fields</th>
+						<th>' . __( 'Fields', CUSTOM_METABOXES_TEXTDOMAIN ) . '</th>
 						<th><a class="meta_box_repeatable_add" href="#"></a></th>
 					</tr>
 				</thead>
@@ -262,7 +265,7 @@ function custom_meta_box_field( $field, $meta = null, $repeatable = null ) {
 				<tfoot>
 					<tr>
 						<th><span class="sort_label"></span></th>
-						<th>Fields</th>
+						<th>' . __( 'Fields', CUSTOM_METABOXES_TEXTDOMAIN ) . '</th>
 						<th><a class="meta_box_repeatable_add" href="#"></a></th>
 					</tr>
 				</tfoot>';
@@ -416,19 +419,21 @@ class Custom_Add_Meta_Box {
 	var $title;
 	var $fields;
 	var $page;
+	var $settings;
 	
-    public function __construct( $id, $title, $fields, $page ) {
+    public function __construct( $id, $title, $fields, $page, $settings ) {
 		$this->id = $id;
 		$this->title = $title;
 		$this->fields = $fields;
 		$this->page = $page;
+		$this->settings = $settings;
 		
 		if( ! is_array( $this->page ) )
 			$this->page = array( $this->page );
 		
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 		add_action( 'admin_head',  array( $this, 'admin_head' ) );
-		add_action( 'add_meta_boxes', array( $this, 'add_box' ) );
+		add_action( 'add_meta_boxes', array( $this, 'add_box', 10, 1 ) );
 		add_action( 'save_post',  array( $this, 'save_box' ));
     }
 	
@@ -522,7 +527,7 @@ class Custom_Add_Meta_Box {
 	/**
 	 * adds the meta box for every post type in $page
 	 */
-	function add_box() {
+	function add_box( $settings ) {
 		foreach ( $this->page as $page ) {
 			add_meta_box( $this->id, $this->title, array( $this, 'meta_box_callback' ), $page, 'normal', 'high' );
 		}
@@ -546,9 +551,13 @@ class Custom_Add_Meta_Box {
 					</tr>';
 			}
 			else {
-				echo '<tr>
-						<th style="width:20%"><label for="' . $field['id'] . '">' . $field['label'] . '</label></th>
+				echo '<tr>';
+				if ( count( $this->fields ) == 1 && ( $field['type'] == 'editor' || $field['type'] == 'repeatable' ) ){
+						echo '<td>';
+				} else {
+						echo '<th style="width:20%"><label for="' . $field['id'] . '">' . $field['label'] . '</label></th>
 						<td>';
+				}
 						
 						$meta = get_post_meta( get_the_ID(), $field['id'], true);
 						echo custom_meta_box_field( $field, $meta );

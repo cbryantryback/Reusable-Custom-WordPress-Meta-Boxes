@@ -455,7 +455,7 @@ class Custom_Add_Meta_Box {
 				meta_box_find_field_type( 'chosen', $this->fields ),
 				meta_box_find_field_type( 'post_chosen', $this->fields )
 			) ) ) {
-				wp_register_script( 'chosen', CUSTOM_METABOXES_DIR . '/js/chosen.js', array( 'jquery' ) );
+				wp_register_script( 'chosen', CUSTOM_METABOXES_DIR . '/js/chosen.jquery.min.js', array( 'jquery' ) );
 				$deps[] = 'chosen';
 				wp_enqueue_style( 'chosen', CUSTOM_METABOXES_DIR . '/css/chosen.css' );
 			}

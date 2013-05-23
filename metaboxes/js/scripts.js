@@ -1,4 +1,9 @@
 jQuery(function($) {
+
+	"use strict";
+
+	var cmb_translatation = cmb_translatation || {};
+	var wp = wp || {};
 	
 	// the upload image button, saves the id and outputs a preview of the image
 	var imageFrame;
@@ -7,8 +12,8 @@ jQuery(function($) {
 		
 		var options, attachment;
 		
-		$self = $(e.target);
-		$div = $self.closest('div.meta_box_image');
+		var $self = $(e.target);
+		var $div = $self.closest('div.meta_box_image');
 		
 		// if the frame already exists, open it
 		if ( imageFrame ) {
@@ -21,25 +26,27 @@ jQuery(function($) {
 			title: cmb_translatation.image_choose,
 			multiple: false,
 			library: {
-		 		type: 'image'
+				type: 'image'
 			},
 			button: {
-		  		text: cmb_translatation.image_use
+				text: cmb_translatation.image_use
 			}
 		});
 		
 		// set up our select handler
 		imageFrame.on( 'select', function() {
-			selection = imageFrame.state().get('selection');
+			var selection = imageFrame.state().get('selection');
 			
-			if ( ! selection )
-			return;
+			if ( ! selection ) {
+				return;
+			}
 			
 			// loop through the selected files
 			selection.each( function( attachment ) {
 				console.log(attachment);
 				var src = attachment.attributes.sizes.full.url;
 				var id = attachment.id;
+				var $div;
 				
 				$div.find('.meta_box_preview_image').attr('src', src);
 				$div.find('.meta_box_upload_image').val(id);
@@ -65,8 +72,8 @@ jQuery(function($) {
 		
 		var options, attachment;
 		
-		$self = $(event.target);
-		$div = $self.closest('div.meta_box_file_stuff');
+		var $self = $(event.target);
+		var $div = $self.closest('div.meta_box_file_stuff');
 		
 		// if the frame already exists, open it
 		if ( fileFrame ) {
@@ -79,19 +86,20 @@ jQuery(function($) {
 			title: cmb_translatation.file_choose,
 			multiple: false,
 			library: {
-		 		type: 'file'
+				type: 'file'
 			},
 			button: {
-		  		text: cmb_translatation.file_use
+				text: cmb_translatation.file_use
 			}
 		});
 		
 		// set up our select handler
 		fileFrame.on( 'select', function() {
-			selection = fileFrame.state().get('selection');
+			var selection = fileFrame.state().get('selection');
 			
-			if ( ! selection )
-			return;
+			if ( ! selection ) {
+				return;
+			}
 			
 			// loop through the selected files
 			selection.each( function( attachment ) {
@@ -184,13 +192,14 @@ jQuery(function($) {
         update: function(event, ui) {
 			var result = $(this).sortable('toArray');
 			var thisID = $(this).attr('id');
-			$('.store-' + thisID).val(result) 
+			$('.store-' + thisID).val(result);
 		}
     });
 
 	$('.sort_list').disableSelection();
 
 	// turn select boxes into something magical
-	if (!!$.prototype.chosen)
+	if (!!$.prototype.chosen) {
 		$('.chosen').chosen({ allow_single_deselect: true });
+	}
 });

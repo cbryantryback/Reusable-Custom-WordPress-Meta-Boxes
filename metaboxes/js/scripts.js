@@ -2,12 +2,12 @@ jQuery(function($) {
 	
 	// the upload image button, saves the id and outputs a preview of the image
 	var imageFrame;
-	$('.meta_box_upload_image_button').click(function(event) {
-		event.preventDefault();
+	$(document).on('click', '.meta_box_upload_image_button', function(e) {
+		e.preventDefault();
 		
 		var options, attachment;
 		
-		$self = $(event.target);
+		$self = $(e.target);
 		$div = $self.closest('div.meta_box_image');
 		
 		// if the frame already exists, open it
@@ -18,13 +18,13 @@ jQuery(function($) {
 		
 		// set our settings
 		imageFrame = wp.media({
-			title: 'Choose Image',
+			title: cmb_translatation.image_choose,
 			multiple: false,
 			library: {
 		 		type: 'image'
 			},
 			button: {
-		  		text: 'Use This Image'
+		  		text: cmb_translatation.image_use
 			}
 		});
 		
@@ -51,7 +51,7 @@ jQuery(function($) {
 	});
 	
 	// the remove image link, removes the image id from the hidden field and replaces the image preview
-	$('.meta_box_clear_image_button').click(function() {
+	$(document).on('click', '.meta_box_clear_image_button', function() {
 		var defaultImage = $(this).parent().siblings('.meta_box_default_image').text();
 		$(this).parent().siblings('.meta_box_upload_image').val('');
 		$(this).parent().siblings('.meta_box_preview_image').attr('src', defaultImage);
@@ -60,7 +60,7 @@ jQuery(function($) {
 	
 	// the file image button, saves the id and outputs the file name
 	var fileFrame;
-	$('.meta_box_upload_file_button').click(function(e) {
+	$(document).on('click', '.meta_box_upload_file_button', function(e) {
 		e.preventDefault();
 		
 		var options, attachment;
@@ -76,13 +76,13 @@ jQuery(function($) {
 		
 		// set our settings
 		fileFrame = wp.media({
-			title: 'Choose File',
+			title: cmb_translatation.file_choose,
 			multiple: false,
 			library: {
 		 		type: 'file'
 			},
 			button: {
-		  		text: 'Use This File'
+		  		text: cmb_translatation.file_use
 			}
 		});
 		
@@ -110,7 +110,7 @@ jQuery(function($) {
 	});
 	
 	// the remove image link, removes the image id from the hidden field and replaces the image preview
-	$('.meta_box_clear_file_button').click(function() {
+	$(document).on('click', '.meta_box_clear_file_button', function() {
 		$(this).parent().siblings('.meta_box_upload_file').val('');
 		$(this).parent().siblings('.meta_box_filename').text('');
 		$(this).parent().siblings('.meta_box_file').removeClass('checked');
@@ -126,13 +126,21 @@ jQuery(function($) {
 		//$("span").text(a.join(" "));
     }
 	// repeatable fields
-	$('.meta_box_repeatable_add').live('click', function() {
+	$(document).on('click', '.meta_box_repeatable_add', function() {
 		// clone
 		var row = $(this).closest('.meta_box_repeatable').find('tbody tr:last-child');
 		var clone = row.clone();
+		var defaultImage = clone.find('.meta_box_default_image').text();
+
 		clone.find('select.chosen').removeAttr('style', '').removeAttr('id', '').removeClass('chzn-done').data('chosen', null).next().remove();
 		clone.find('input.regular-text, textarea, select').val('');
 		clone.find('input[type=checkbox], input[type=radio]').attr('checked', false);
+		clone.find('.meta_box_upload_image').val('');
+		clone.find('.meta_box_preview_image').attr('src', defaultImage);
+		clone.find('.meta_box_upload_file').val('');
+		clone.find('.meta_box_filename').text('');
+		clone.find('.meta_box_file').removeClass('checked');
+
 		row.after(clone);
 		// increment name and id
 		clone.find('input, textarea, select')
@@ -153,7 +161,7 @@ jQuery(function($) {
 		return false;
 	});
 	
-	$('.meta_box_repeatable_remove').live('click', function(){
+	$(document).on('click', '.meta_box_repeatable_remove', function() {
 		$(this).closest('tr').remove();
 		return false;
 	});

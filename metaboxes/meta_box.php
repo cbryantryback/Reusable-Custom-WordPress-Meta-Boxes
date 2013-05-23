@@ -458,6 +458,13 @@ class Custom_Add_Meta_Box {
 				wp_register_script( 'chosen', CUSTOM_METABOXES_DIR . '/js/chosen.jquery.min.js', array( 'jquery' ) );
 				$deps[] = 'chosen';
 				wp_enqueue_style( 'chosen', CUSTOM_METABOXES_DIR . '/css/chosen.css' );
+				$translation_array = array(
+					'image_choose' => __( 'Choose Image', CUSTOM_METABOXES_TEXTDOMAIN ),
+					'image_use'    => __( 'Use Image', CUSTOM_METABOXES_TEXTDOMAIN ),
+					'file_choose'  => __( 'Choose File', CUSTOM_METABOXES_TEXTDOMAIN ),
+					'file_use'     => __( 'Use File', CUSTOM_METABOXES_TEXTDOMAIN )
+				);
+				wp_localize_script( 'chosen', 'cmb_translatation', $translation_array );
 			}
 			if ( in_array( true, array( 
 				meta_box_find_field_type( 'date', $this->fields ), 
